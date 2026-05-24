@@ -201,17 +201,18 @@ Response (200 OK):
 ![Landing Page](screenshots/landing_page.png)
 Головна сторінка веб-сервісу.
 
-3. Dashboard & Calendar Schedule (Панель розкладу та завдань)
+2. Dashboard & Calendar Schedule (Панель розкладу та завдань)
 ![Dashboard Schedule](screenshots/dashboard_schedule.png)
 Основний робочий простір: інтерактивний календар, поточні завдання та списки звичок.
 
-4. User Profile & Analytics (Профіль користувача та аналітика)
+3. User Profile & Analytics (Профіль користувача та аналітика)
 ![User Profile](screenshots/user_profile.png)
 Особистий кабінет із візуальними графіками прогресу, нагородами та лічильником серій активності (streaks).
 
-5. AI Intelligent Assistant Chat (Діалог з ШІ-Асистентом)
+
+4. AI Intelligent Assistant Chat (Діалог з ШІ-Асистентом)
 ![AI Chat](screenshots/ai_chat.png)
+Інтерфейс чату, де ШІ обробляє природну мову та автоматично вносить завдання у розклад через Tool Calling.
 
 ---
 
-Інтерфейс чату, де ШІ обробляє природну мову та автоматично вносить завдання у розклад через Tool Calling.
