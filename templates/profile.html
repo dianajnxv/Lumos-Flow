@@ -141,7 +141,7 @@ user.username }}{% endblock %} {% block style %}
     <div class="col-md-4">
       <div class="profile-card p-4 side-chart-card">
         <h4 class="diagram-title">Habit Statistics</h4>
-        <canvas id="statisticsChart"></canvas>
+        <canvas id="weeklyChart"></canvas>
       </div>
     </div>
   </div>
@@ -200,6 +200,7 @@ user.username }}{% endblock %} {% block style %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  const weekly = JSON.parse('{{ js_weekly_activity|escapejs }}');
   const pieOptions = {
     maintainAspectRatio: false,
     plugins: {
@@ -271,22 +272,18 @@ user.username }}{% endblock %} {% block style %}
     options: pieOptions
   });
 
-  new Chart(document.getElementById('statisticsChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Done', 'Missed', 'Skipped'],
-      datasets: [{
-        label: 'Total Habits',
-        data: {{ js_success_data|safe }},
-        backgroundColor: '#6366f1',
-        borderRadius: 5
-      }]
-    },
-    options: { 
-      ...scalarOptions, 
-      plugins: { ...scalarOptions.plugins, legend: { display: false } } 
-    }
-  });
+new Chart(document.getElementById('weeklyChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    datasets: [{
+      label: 'Consistency',
+      data: [...weekly],
+      backgroundColor: 'rgba(99,102,241,0.2)',
+      borderColor: '#6366f1'
+    }]
+  }
+});
 </script>
 <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

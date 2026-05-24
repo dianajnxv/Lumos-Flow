@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.utils.dateformat import format
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models.functions import ExtractWeekDay
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -137,6 +138,18 @@ def profile_view(request, username):
         status__iexact='done', 
         date__gte=timezone.now() - timedelta(days=30)
     ).values('date').annotate(total=Count('id')).order_by('date')
+    
+    weekly = (
+    Progress.objects.filter(user_id=user.id, status='done')
+    .annotate(day=ExtractWeekDay('date'))
+    .values('day')
+    .annotate(total=Count('id'))
+    )
+
+    week_map = [0] * 7
+    for item in weekly:
+        index = (item['day'] + 5) % 7
+        week_map[index] = item['total']
 
     act_labels = [item['date'].strftime('%d %b') for item in activity_query]
     act_values = [item['total'] for item in activity_query]
@@ -162,6 +175,7 @@ def profile_view(request, username):
         'js_cat_counts': json.dumps([item['count'] for item in habits_data]),
         'js_act_labels': json.dumps(act_labels),
         'js_act_values': json.dumps(act_values),
+        'js_weekly_activity': json.dumps(week_map),
         'success_percentage': actual_success_rate,
     }
     return render(request, 'profile.html', context)

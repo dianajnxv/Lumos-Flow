@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (logoImg && logoImg.tagName === "IMG") {
       logoImg.src =
         theme === "dark"
-          ? "/static/image/logo-white.png"
-          : "/static/image/logo-black.png";
+          ? "/static/images/logo-white.png"
+          : "/static/images/logo-black.png";
     }
 
     localStorage.setItem("selected-theme", theme);

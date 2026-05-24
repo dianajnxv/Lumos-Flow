@@ -48,17 +48,4 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     },
   };
-
-  const charts = [
-    { id: "activityChart", type: "line" },
-    { id: "successChart", type: "doughnut" },
-    { id: "categoryChart", type: "radar" },
-    { id: "statisticsChart", type: "bar" },
-  ];
-
-  charts.forEach((chart) => {
-    const canvas = document.getElementById(chart.id);
-    if (canvas) {
-    }
-  });
 });
