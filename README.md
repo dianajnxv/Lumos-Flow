@@ -216,3 +216,28 @@ Response (200 OK):
 
 ---
 
+Проблеми і рішення 
+
+| Проблема                                 | Рішення                                                                                                         |
+| :---                                     | :---                                                                                                            |
+| Помилка підключення до БД                | Перевір параметри підключення у файлі `.env` та перевір, чи запущено службу PostgreSQL на ПК.                   |
+| OpenAI API не відповідає                 | Перевір наявність та коректність токена `OPENAI_API_KEY` у файлі `.env`, а також перевір баланс акаунту OpenAI. |
+| Статичні файли не завантажуються         | Виконай команду `python manage.py collectstatic` для збору всіх стилів та скриптів у спільну директорію.        |
+| Міграції не застосовуються               | Перевір структуру моделей у `models.py` та виконай `python manage.py migrate --run-syncdb` або `python manage.py makemigrations`.                                                                                                                                             |
+| Стилі Bootstrap не відображаються        | Перевір наявність підключення CDN-посилання Bootstrap у тегу `<head>` базового шаблону або перевір правильність використання тегу `{% load static %}`.                                                                                                                       |
+| Помилка 8000 порту (Port already in use) | Перевір, чи не запущено інший процес Django у фоні, або виконай запуск на іншому порту: `python manage.pyrunserver 8080`.                                                                                                                                                       |
+| Помилка ModuleNotFoundError              | Перевір, чи активоване віртуальне середовище (`.venv`), та виконай команду `pip install -r requirements.txt`.   |
+
+---
+
+Використані джерела 
+
+[Django Web Framework Documentation](https://docs.djangoproject.com/en/stable/) — Офіційна документація з налаштування архітектури, моделей, сесій та шаблонів (Templates).
+[Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/) — Посібник з використання адаптивної сітки, готових компонентів (модальні вікна, картки) та утилітарних класів.
+[OpenAI API Reference](https://platform.openai.com/docs/api-reference) — Інструкція з інтеграції ШІ-моделей, налаштування запитів чату та використання механізму Tool Calling.
+[PostgreSQL Official Documentation](https://www.postgresql.org/docs/) — Посібник з адміністрування бази даних, реляційних зв'язків та оптимізації SQL-запитів.
+[Python 3.12 Documentation](https://docs.python.org/3/) — Офіційна документація мови програмування Python та вбудованих модулів.
+[MDN Web Docs - HTML & CSS](https://developer.mozilla.org/en-US/docs/Web) — Базова документація щодо семантичної розмітки вебсторінок та кастомних стилів CSS.
+[Stack Overflow](https://stackoverflow.com) — Спільнота розробників для вирішення технічних багів та пошуку найкращих практик написання коду.
+
+---
