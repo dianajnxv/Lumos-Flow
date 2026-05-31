@@ -1,11 +1,8 @@
-import random
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Habit, CustomUser
+from .models import Habit, Progress
 from .service import AchievementService
 from datetime import date, timedelta
-from django.utils import timezone
-from django.db.models import Count, Q
 
 @receiver(post_save, sender=Habit)
 def habit_saved_handler(sender, instance, created, **kwargs):
@@ -15,14 +12,17 @@ def habit_saved_handler(sender, instance, created, **kwargs):
 
 def _update_streaks_in_db(user):
     today = date.today()
-    completed_dates = Habit.objects.filter(
-        user=user, 
-        status='done'
-    ).values_list('created_at__date', flat=True).order_by('-created_at__date').distinct()
+    completed_dates = (
+        Progress.objects
+        .filter(user=user, status='done')
+        .values_list('date', flat=True)
+        .order_by('-date')
+        .distinct()
+    )
 
     dates_list = list(completed_dates)
     new_current_streak = 0
-    
+
     if dates_list:
         if dates_list[0] == today or dates_list[0] == (today - timedelta(days=1)):
             new_current_streak = 1

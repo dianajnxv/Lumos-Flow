@@ -1,5 +1,5 @@
 {% extends 'master.html' %} {% load static %} {% block title %}Profile | {{
-user.username }}{% endblock %} {% block style %}
+profile_user.username }}{% endblock %} {% block style %}
 <link rel="stylesheet" href="{% static 'css/profile_style.css' %}" />
 <link
   rel="stylesheet"
@@ -20,32 +20,32 @@ user.username }}{% endblock %} {% block style %}
 
 <div class="row g-4 mb-4">
 
-  <!-- LEFT COLUMN -->
   <div class="col-lg-4 d-flex flex-column gap-4">
 
-    <!-- PROFILE -->
     <div class="profile-card main-card text-center p-4">
       <div class="avatar-wrapper mb-3">
-        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="profile-avatar-img" />
+        <img src="{{ profile_user.avatar.url }}" alt="{{ profile_user.username }}" class="profile-avatar-img" />
       </div>
-      <h2 class="profile-name">{{ user.username }}</h2>
-      <p class="profile-email text-muted">{{ user.email }}</p>
-      {% if user.bio %}<p class="profile-bio">{{ user.bio }}</p>{% endif %}
+      <h2 class="profile-name">{{ profile_user.username }}</h2>
+      <p class="profile-email text-muted">{{ profile_user.email }}</p>
+      {% if profile_user.bio %}<p class="profile-bio">{{ profile_user.bio }}</p>{% endif %}
 
-      {% if request.user.username == user.username %}
+      {% if request.user.username == profile_user.username %}
       <div class="profile-actions mt-4">
         <button class="btn btn-edit-profile" data-bs-toggle="modal" data-bs-target="#editProfile">
           <i class="fas fa-user-edit me-2"></i>Edit Profile
         </button>
+        <a href="{% url 'logout' %}" class="btn-logout-icon mt-2">
+        <i class="fas fa-sign-out-alt me-2"></i>Log Out
+    </a>
       </div>
       {% endif %}
     </div>
 
-    <!-- TROPHIES -->
     <div class="profile-card p-4 text-center">
       <h3>My Trophies</h3>
       <div class="achievements-gallery mt-3">
-        {% for ach in user.achievements.all %}
+        {% for ach in profile_user.achievements.all %}
           <div class="achievement-item tooltip-wrapper" data-title="{{ ach.name }}">
             <img src="/static/images/achievements/{{ ach.image_name }}" 
                  alt="{{ ach.name }}" 
@@ -59,10 +59,8 @@ user.username }}{% endblock %} {% block style %}
 
   </div>
 
-  <!-- RIGHT COLUMN -->
   <div class="col-lg-8 d-flex flex-column gap-4">
 
-    <!-- STATS -->
     <div class="row g-3">
       <div class="col-md-6">
         <div class="stat-card-mini">
@@ -85,7 +83,6 @@ user.username }}{% endblock %} {% block style %}
       </div>
     </div>
 
-    <!-- STREAK -->
     <div class="profile-card streak-card p-4">
       <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-3">
@@ -98,10 +95,10 @@ user.username }}{% endblock %} {% block style %}
           </div>
         </div>
         <div class="text-end">
-  <div class="streak-value">{{ user.current_overall_streak }}</div>
+  <div class="streak-value">{{ profile_user.current_overall_streak }}</div>
   <div class="streak-label-days">Days</div>
 
-  {% if user.current_overall_streak == 0 %}
+  {% if profile_user.current_overall_streak == 0 %}
     <p class="text-muted small mt-2">
       Start your streak today 🔥
     </p>
@@ -115,7 +112,6 @@ user.username }}{% endblock %} {% block style %}
       </div>
     </div>
 
-    <!-- ACTIVITY -->
     <div class="profile-card p-4">
       <h3>Contribution Activity</h3>
       <canvas id="activityChart"></canvas>
@@ -152,7 +148,7 @@ user.username }}{% endblock %} {% block style %}
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content custom-modal">
         <form
-          action="{% url 'edit_profile' username=user.username %}"
+          action="{% url 'edit_profile' username=profile_user.username %}"
           method="POST"
           enctype="multipart/form-data"
         >
@@ -160,9 +156,9 @@ user.username }}{% endblock %} {% block style %}
           <input type="hidden" name="_method" value="PUT" />
           <div class="modal-header">
             <h5 class="modal-title">Edit Your Profile</h5>
-            <button class="close-modal-btn">
-                <i class="fas fa-times"></i>
-            </button>
+            <button type="button" class="close-modal-btn" data-bs-dismiss="modal">
+              <i class="fas fa-times"></i>
+          </button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
@@ -171,14 +167,14 @@ user.username }}{% endblock %} {% block style %}
                 type="text"
                 name="new_username"
                 class="form-control"
-                value="{{ user.username }}"
+                value="{{ profile_user.username }}"
                 required
               />
             </div>
             <div class="mb-3">
               <label class="form-label">Bio</label>
               <textarea name="bio" class="form-control" rows="3">
-{{ user.bio }}</textarea
+{{ profile_user.bio }}</textarea
               >
             </div>
             <div class="mb-3">

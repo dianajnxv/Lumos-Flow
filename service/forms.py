@@ -3,11 +3,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-import re
 
 from .models import Habit
 
 User = get_user_model()
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Email")
@@ -20,6 +20,12 @@ class CustomUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].help_text = None
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email is already registered.")
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -47,19 +53,8 @@ class SubscribeForm(forms.Form):
         })
     )
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-
-        if not email:
-            raise ValidationError("This field is required.")
-
-        if not re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email):
-            raise ValidationError("Enter a valid email address.")
-
-        return email
-
 
 class HabitForm(forms.ModelForm):
     class Meta:
         model = Habit
-        fields = '__all__'
+        fields = ['name', 'category', 'priority', 'frequency', 'status']

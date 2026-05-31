@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
     eventClick: function (info) {
       const event = info.event;
       if (!event.id) {
-        alert("Error: Task without ID");
+        Toast.show("Error: Task without ID.", "error");
         return;
       }
 
@@ -88,12 +88,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const newTitle = editTaskTitleInput.value.trim();
 
     if (!id) {
-      alert("Missing task ID");
+      Toast.show("Missing task ID.", "error");
       return;
     }
-
     if (!newTitle) {
-      alert("Task title cannot be empty");
+      Toast.show("Task title cannot be empty.", "error");
       return;
     }
 
@@ -109,11 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (res.ok) {
           editTaskModal.currentEvent.setProp("title", newTitle);
           editTaskModal.style.display = "none";
+          Toast.show("Task updated!", "success");
         } else {
-          alert("Failed to update task");
+          Toast.show("Failed to update task.", "error");
         }
       })
-      .catch(() => alert("Network error"));
+      .catch(() => Toast.show("Network error.", "error"));
   });
 
   deleteTaskBtn.addEventListener("click", function () {
@@ -122,19 +122,18 @@ document.addEventListener("DOMContentLoaded", function () {
     if (confirm("Delete this task?")) {
       fetch(`/api/tasks/delete/${id}/`, {
         method: "DELETE",
-        headers: {
-          "X-CSRFToken": csrftoken,
-        },
+        headers: { "X-CSRFToken": csrftoken },
       })
         .then((res) => {
           if (res.ok) {
             editTaskModal.currentEvent.remove();
             editTaskModal.style.display = "none";
+            Toast.show("Task deleted.", "warning");
           } else {
-            alert("Failed to delete task");
+            Toast.show("Failed to delete task.", "error");
           }
         })
-        .catch(() => alert("Network error"));
+        .catch(() => Toast.show("Network error.", "error"));
     }
   });
 
@@ -148,25 +147,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const title = taskTitleInput.value.trim();
     const date = taskDateInput.value;
 
-    if (title && date) {
-      fetch("/api/tasks/add/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrftoken,
-        },
-        body: JSON.stringify({ title: title, date: date }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === "success") {
-            calendar.refetchEvents();
-            taskModal.style.display = "none";
-          } else {
-            alert("Error while adding task");
-          }
-        });
+    if (!title || !date) {
+      Toast.show("Please fill in all fields.", "warning");
+      return;
     }
+
+    fetch("/api/tasks/add/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify({ title: title, date: date }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          calendar.refetchEvents();
+          taskModal.style.display = "none";
+          Toast.show("Task added!", "success");
+        } else {
+          Toast.show("Error while adding task.", "error");
+        }
+      })
+      .catch(() => Toast.show("Network error.", "error"));
   });
 
   closeModalBtn.addEventListener("click", () => {

@@ -17,23 +17,29 @@ document.addEventListener("DOMContentLoaded", function () {
   const editForm = document.querySelector("#editProfile form");
   if (editForm) {
     editForm.addEventListener("submit", async function (e) {
-      const isAjax = false;
-      if (isAjax) {
-        e.preventDefault();
-        const formData = new FormData(editForm);
-        try {
-          const response = await fetch(editForm.action, {
-            method: "POST",
-            headers: { "X-CSRFToken": getCookie("csrftoken") },
-            body: formData,
-          });
-          const result = await response.json();
-          if (result.status === "success") {
-            window.location.reload();
-          }
-        } catch (error) {
-          console.error("Error:", error);
+      e.preventDefault();
+      const formData = new FormData(editForm);
+      try {
+        const response = await fetch(editForm.action, {
+          method: "POST",
+          headers: { "X-CSRFToken": getCookie("csrftoken") },
+          body: formData,
+        });
+        const result = await response.json();
+        if (result.status === "success") {
+          Toast.show("Profile updated!", "success");
+          window.location.reload();
+        } else {
+          Toast.show(
+            result.username_error ||
+              result.bio_error ||
+              result.avatar_error ||
+              "Update failed.",
+            "error",
+          );
         }
+      } catch (error) {
+        Toast.show("Something went wrong.", "error");
       }
     });
   }

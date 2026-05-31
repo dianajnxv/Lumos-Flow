@@ -2,7 +2,7 @@ import openai
 import json
 from django.conf import settings
 from django.utils import timezone
-from service.models import Habit, Task, Achievement
+from service.models import Habit, Task
 from .models import AIChatMessage
 
 class AIAgentService:
@@ -33,6 +33,21 @@ class AIAgentService:
                 "upcoming_tasks": "; ".join(tasks_info) or "no tasks for the next 7 days",
                 "stats_today": f"{all_habits.filter(status='done').count()}/{all_habits.count()} total habits tracked"
             }
+            
+    def detect_burnout_signals(self):
+        from service.models import Progress
+        today = timezone.now().date()
+        week_ago = today - timezone.timedelta(days=7)
+        
+        recent = Progress.objects.filter(user=self.user, date__gte=week_ago)
+        total = recent.count()
+        missed = recent.filter(status='missed').count()
+        
+        if total > 0 and missed / total > 0.5:
+            return "burnout_risk"
+        if self.user.current_overall_streak == 0 and self.user.best_overall_streak > 5:
+            return "streak_broken"
+        return None
 
     def create_new_task(self, title, date):
         try:
@@ -91,14 +106,33 @@ class AIAgentService:
             }
         ]
 
+        burnout = self.detect_burnout_signals()
+
+        if burnout == "burnout_risk":
+            tone = (
+                "The user is showing signs of burnout — over 50% of habits missed this week. "
+                "Do NOT mention what they failed to do. Be warm and gentle. "
+                "Suggest reducing habits to 2-3 for this week. No pressure, no judgement."
+            )
+        elif burnout == "streak_broken":
+            tone = (
+                "The user just broke a good streak. Do NOT focus on the failure. "
+                "Acknowledge it briefly, then suggest one easy 'reset day' to start fresh. "
+                f"Remind them their best streak was {self.user.best_overall_streak} days — "
+                "that's proof they can do it again."
+            )
+        else:
+            tone = "Be encouraging, specific, and motivating. Reference habit names directly."
+
         system_instructions = (
-            f"You are the HabiTrack AI Mentor. Today is {context['today_date']}. "
-            f"Your General Habit Schedule:\n{context['habits_schedule']}\n "
-            f"Specific Upcoming Tasks: {context['upcoming_tasks']}. "
-            "When the user asks about ANY day (like Sunday, next week, etc.), "
+            f"You are the Lumos Flow AI Mentor. Today is {context['today_date']}. "
+            f"User's habit schedule:\n{context['habits_schedule']}\n"
+            f"Upcoming tasks: {context['upcoming_tasks']}.\n"
+            f"Today's progress: {context['stats_today']}.\n"
+            f"When the user asks about ANY day (like Sunday, next week, etc.), "
             "check the 'General Habit Schedule' to see which habits fall on those days. "
             "For tasks, only report what is in the 'Upcoming Tasks' list. "
-            "Always be encouraging and reference specific habit names! 🌟"
+            f"Tone guidance: {tone}"
         )
         messages = [{"role": "system", "content": system_instructions}]
         messages.extend(chat_history)
@@ -150,8 +184,8 @@ class AIAgentService:
 
     def get_fallback_logic(self, msg, context):
         msg = msg.lower()
-        if any(word in msg for word in ["tired", "exhausted", "burnout"]):
-            return f"I hear you. You've done {context['stats']} today. Rest is vital. 🌿"
-        if any(word in msg for word in ["task", "todo", "schedule"]):
-            return f"Your tasks: {context['tasks_list']}. You can do this! ✨"
-        return "I'm in offline mode, but I'm still here to support your progress! 💪"
+        if any(word in msg for word in ["tired", "exhausted", "burnout", "broke", "failed"]):
+            return f"I hear you. You've done {context['stats_today']} today. Rest is part of progress. 🌿"
+        if any(word in msg for word in ["task", "todo", "schedule", "today", "week"]):
+            return f"Your upcoming tasks: {context['upcoming_tasks']}. You can do this! ✨"
+        return "I'm in offline mode right now, but I'm still here supporting your progress! 💪"

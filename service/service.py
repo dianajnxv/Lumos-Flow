@@ -1,6 +1,4 @@
-from datetime import timedelta
-from django.utils import timezone
-from django.db.models import Count, Q
+from django.db.models import Q
 from .models import Habit, Achievement
 
 class AchievementService:

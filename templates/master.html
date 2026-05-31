@@ -23,7 +23,14 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/hero.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/about.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tips.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/testimonials.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}" />
     <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
     <link
       rel="stylesheet"
@@ -46,14 +53,18 @@
   <body class="{{ theme|default:'light' }}-theme">
     {% block content %}{% endblock %}
 
-    {% include 'partials/ai_chat.html' %}
+    {% if user.is_authenticated %}
+      {% include 'partials/ai_chat.html' %}
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    <script src="{% static 'js/chat.js' %}"></script>
+    {% if user.is_authenticated %}
+      <script src="{% static 'js/chat.js' %}"></script>
+    {% endif %}
 
     <script src="{% static 'js/change_theme.js' %}" defer></script>
 
@@ -65,5 +76,104 @@
     <script src="{% static 'js/notifications.js' %}"></script>
 
     {% block script %}{% endblock %}
+    <canvas id="trail-canvas" style="
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    "></canvas>
+
+    <script>
+const canvas = document.getElementById('trail-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+const themeColors = {
+  light:        ['#3A3A3C', '#86868B', '#1D1D1F', '#3A3A3C'],
+  dark:         ['#F5F5F7', '#A1A1A6', '#FFFFFF', '#F5F5F7'],
+  motivational: ['#FF9500', '#FF9500', '#8E705A', '#FF9500'],
+};
+
+function getThemeColors() {
+  const body = document.body;
+  if (body.classList.contains('dark-theme')) return themeColors.dark;
+  if (body.classList.contains('motivational-theme')) return themeColors.motivational;
+  return themeColors.light;
+}
+
+const blobs = [];
+let trailActive = false;
+
+const zones = [
+  document.querySelector('.intro-section'),
+  document.querySelector('footer'),
+];
+
+zones.forEach(el => {
+  if (!el) return;
+  el.addEventListener('mouseenter', () => trailActive = true);
+  el.addEventListener('mouseleave', () => trailActive = false);
+});
+
+document.addEventListener('mousemove', e => {
+  if (!trailActive) return;
+  const colors = getThemeColors();
+  blobs.push({
+    x: e.clientX,
+    y: e.clientY,
+    size: 20 + Math.random() * 20,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    alpha: 0.6,
+    vx: (Math.random() - 0.5) * 1.5,
+    vy: (Math.random() - 0.5) * 1.5 - 0.5,
+  });
+});
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = blobs.length - 1; i >= 0; i--) {
+    const b = blobs[i];
+    b.x += b.vx;
+    b.y += b.vy;
+    b.size *= 1.04;
+    b.alpha -= 0.018;
+    if (b.alpha <= 0) { blobs.splice(i, 1); continue; }
+
+    const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.size);
+    g.addColorStop(0, b.color + 'cc');
+    g.addColorStop(0.5, b.color + '44');
+    g.addColorStop(1, 'transparent');
+    ctx.globalAlpha = b.alpha;
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+<script>
+      const navbar = document.querySelector('.navbar');
+      const footer = document.querySelector('footer');
+
+      if (navbar && footer) {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            navbar.style.opacity = entry.isIntersecting ? '0' : '';
+            navbar.style.pointerEvents = entry.isIntersecting ? 'none' : '';
+          },
+          { threshold: 0.8 }
+        );
+        observer.observe(footer);
+      }
+    </script>
   </body>
 </html>

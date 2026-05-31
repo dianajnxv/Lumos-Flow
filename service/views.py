@@ -6,18 +6,16 @@ from functools import wraps
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.db import models
 from django.db.models import Q, Count
 from django.http import JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from django.utils.dateformat import format
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models.functions import ExtractWeekDay
 
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 from .forms import (
     CustomUserCreationForm,
@@ -26,7 +24,7 @@ from .forms import (
     HabitForm
 )
 
-from .models import CustomUser, Progress, Habit, Statistic, Category, Task
+from .models import CustomUser, Progress, Habit, Category, Task
 
 ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg']
 
@@ -58,27 +56,6 @@ def user_is_owner(view_func):
             return redirect('login')
         return view_func(request, *args, **kwargs)
     return wrapper
-
-def get_monthly_activity(user, year, month):
-    start_date = date(year, month, 1)
-    end_date = (start_date + timedelta(days=31)).replace(day=1) - timedelta(days=1)
-
-    progress_data = (
-        Progress.objects.filter(
-            user=user,
-            date__range=(start_date, end_date),
-            status='completed'
-        )
-        .values('date')
-        .annotate(activity_count=Count('id'))
-        .order_by('date')
-    )
-
-    activity = {day: 0 for day in range(1, end_date.day + 1)}
-    for record in progress_data:
-        activity[record['date'].day] = record['activity_count']
-
-    return activity
 
 def home_view(request):
     context = {
@@ -168,7 +145,7 @@ def profile_view(request, username):
     actual_success_rate = round((done / total * 100), 1) if total > 0 else 0
 
     context = {
-        'user': user,
+        'profile_user': user,
         'habits_count': Habit.objects.filter(user_id=user.id).count(),
         'js_success_data': json.dumps(success_list),
         'js_cat_labels': json.dumps([item['category'] for item in habits_data]),
@@ -215,7 +192,7 @@ def edit_profile_view(request, username):
 
             user.save()
             
-            return redirect('profile', username=user.username)
+            return JsonResponse({"status": "success"})
 
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)}, status=400)
@@ -224,14 +201,16 @@ def edit_profile_view(request, username):
 
 @csrf_exempt
 def change_theme(request):
-    if request.method == "POST" and request.user.is_authenticated:
-        theme = request.POST.get("theme")  
-        if theme in ["light", "dark", "motivational"]:  
-            request.user.theme = theme
-            request.user.save()
+    if request.method == "POST":
+        theme = request.POST.get("theme")
+        if theme in ["light", "dark", "motivational"]:
+            if request.user.is_authenticated:
+                request.user.theme = theme
+                request.user.save()
+            request.session['theme'] = theme
             return JsonResponse({"status": "success", "message": "Theme updated successfully."})
         return JsonResponse({"status": "error", "message": "Invalid theme selected."}, status=400)
-    return JsonResponse({"status": "error", "message": "Unauthorized or invalid request."}, status=401)
+    return JsonResponse({"status": "error", "message": "Invalid request."}, status=400)
 
 @csrf_exempt
 def create_habit_view(request):
@@ -252,7 +231,6 @@ def create_habit_view(request):
                 frequency=days,  
                 priority=priority,
                 user_id=request.user.id,
-                created_at=timezone.now(),
             )
 
             return JsonResponse({'success': True})  
@@ -331,9 +309,6 @@ def toggle_status(request, pk):
         
     return redirect('schedule')
 
-def home(request):
-    return render(request, 'home.html')
-
 @login_required
 def get_tasks(request):
     if request.method == 'GET':
@@ -402,11 +377,6 @@ def add_task(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
     return HttpResponseNotAllowed(['POST'])
 
-
-@login_required
-def schedule_page(request):
-    return render(request, 'schedule.html')
-
 @login_required
 def delete_task(request, task_id):
     if request.method == 'DELETE':
@@ -449,7 +419,7 @@ def get_ai_context(request):
     
     today_tasks = Task.objects.filter(user=request.user, date=today).values_list('title', flat=True)
     
-    return {
-        'habits_list': today_habits,
-        'tasks_list': list(today_tasks)
-    }
+    return JsonResponse({
+    'habits_list': today_habits,
+    'tasks_list': list(today_tasks)
+})

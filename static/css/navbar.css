@@ -1,3 +1,38 @@
+.theme-toggle {
+    position: relative;
+    display: inline-block;
+    z-index: 99999 !important;
+}
+
+#dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;               
+    background-color: var(--dropdown-bg);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 120px;
+    z-index: 100000 !important;
+}
+
+#dropdown button {
+    width: 100%;
+    padding: 10px 15px;
+    text-align: left;
+    border: none;
+    background: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+#dropdown button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 .navbar {
     position: fixed; 
     top: 0;
@@ -49,7 +84,6 @@
     font-size: 15px;
     color: var(--text-color);
     transition: color 0.3s;
-    
     background: none;
     border: none;
     padding: 0; 
@@ -84,7 +118,6 @@
     color: var(--background-color);
 }
 
-/* HEADER PROGRESS */
 .header-progress-container {
     width: 100%;
     height: 6px;
@@ -113,61 +146,21 @@
     opacity: 0.8;
 }
 
-/* INTRO */
-.intro-section {
-    height: 100vh;
-    width: 100%;
+.btn-theme-brush {
+    width: 45px;
+    height: 45px;
+    border: 1.5px solid var(--accent-color);
+    border-radius: 50%; 
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
     display: flex;
+    align-items: center;
     justify-content: center;
-    align-items: center;
-    background-color: var(--background-color);
-    position: relative;
-    overflow: hidden;
+    transition: 0.3s;
 }
 
-.content-center {
-    text-align: center;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.magic-wrapper {
-    position: relative;
-    padding: 20px;
-}
-
-/* FOOTER */
-.footer {
-    padding: 60px 40px;
-    flex-wrap: wrap;
-    background-color: var(--background-color); 
-    filter: brightness(0.96);
-    border-top: 4px solid var(--accent-color);
-    position: relative;
-    width: 100%;
-}
-
-.footer-section {
-    flex: 1;
-    margin: 20px;
-    min-width: 250px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.footer-bottom {
-    width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    border-top: 1px solid rgba(128, 128, 128, 0.1);
-    margin-top: 40px;
-}
-
-.footer-logo {
-    max-width: 160px;
-    height: auto;
-    margin-bottom: 20px;
+.btn-theme-brush:hover {
+    background-color: var(--accent-color);
+    color: var(--background-color);
 }

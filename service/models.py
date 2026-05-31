@@ -1,10 +1,6 @@
-import random
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from datetime import date, timedelta
-from django.utils import timezone
-from django.db.models import Count, Q
 
 class ThemeChoices(models.TextChoices):
     LIGHT = "light", "Light Theme"
@@ -19,9 +15,6 @@ class CustomUser(AbstractUser):
     email = models.EmailField(
         unique=True,
         db_index=True
-    )
-    google_calendar_integration = models.BooleanField(
-        default=False
     )
     theme = models.CharField(
         max_length=20,
@@ -38,9 +31,6 @@ class CustomUser(AbstractUser):
         default=0
     )
     best_overall_streak = models.PositiveIntegerField(
-        default=0
-    )
-    morning_lark_streak = models.PositiveIntegerField(
         default=0
     )
 
@@ -206,13 +196,6 @@ class Statistic(models.Model):
 
     def __str__(self):
         return f"Stats for {self.habit.name} ({self.period})"
-
-class Theme(models.Model):
-    name = models.CharField(max_length=50)
-    style = models.TextField()
-
-    def __str__(self):
-        return self.name
 
 class Task(models.Model):
     PRIORITY_CHOICES = [

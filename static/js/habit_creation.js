@@ -56,17 +56,17 @@ document
 
       const result = await response.json();
       if (result.success) {
-        alert("Habit created successfully!");
+        Toast.show("Habit created successfully!", "success");
         const modal = bootstrap.Modal.getInstance(
           document.getElementById("modalSummary"),
         );
         modal.hide();
       } else {
-        alert(`Error: ${result.error}`);
+        Toast.show(result.error || "Failed to create habit.", "error");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to create habit. Please try again.");
+      Toast.show("Failed to create habit. Please try again.", "error");
     }
   });
 

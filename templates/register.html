@@ -1,41 +1,80 @@
 {% extends 'master.html' %}
-
 {% block title %}Register{% endblock %}
 
-{% block style %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/home_light.css' %}">
-{% endblock %}
-
 {% block content %}
-    <div class="form-overlay">
-        <div class="form-container">
-            <form class="form active" id="registerForm" method="post">
-                <h2>Register</h2>
-                {% csrf_token %}
-                
-                {% for field in form %}
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        
-                        {% if field.help_text %}
-                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
-                        {% endif %}
-                        
-                        {% for error in field.errors %}
-                            <p class="form-error" style="color: #ff2c2c;">{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
+<div class="auth-page">
+  <canvas id="auth-blobs"></canvas>
+  <div class="form-container">
+    <form class="form active" id="registerForm" method="post">
+      <h2 style="margin-bottom: 1.5rem; font-weight: 700; color: var(--text-color);">Register</h2>
+      {% csrf_token %}
 
-                <div class="d-grid gap-2 mt-3">
-                    <button type="submit" class="btn btn-outline-secondary">Register</button>
-                </div>
-                <p class="form-switch mt-3">
-                    Already have an account? <a href="{% url 'login' %}">Login here</a>
-                </p>
-            </form>
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}
+            <small style="color: var(--description-color); font-size: 0.8rem;">{{ field.help_text|safe }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <p class="form-error">{{ error }}</p>
+          {% endfor %}
         </div>
-    </div>
+      {% endfor %}
+
+      <div class="mt-3">
+        <button type="submit" class="btn-submit">Register</button>
+      </div>
+      <p class="form-switch mt-3">
+        Already have an account? <a href="{% url 'login' %}">Login here</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('auth-blobs');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+function getBlobColors() {
+  const body = document.body;
+  if (body.classList.contains('dark-theme'))
+    return ['#3A3A3C','#5A5A5C','#8E705A','#4A4A4C','#2C2C2E','#6B5347'];
+  if (body.classList.contains('motivational-theme'))
+    return ['#FF9500','#8E705A','#C4834A','#FF9500','#8E705A','#C4834A'];
+  return ['#3A3A3C','#86868B','#5A5A5C','#8E705A','#1D1D1F','#6B5347'];
+}
+const colors = getBlobColors();
+const blobs = Array.from({length: 6}, (_, i) => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: 120 + Math.random() * 120,
+  vx: (Math.random() - 0.5) * 0.5,
+  vy: (Math.random() - 0.5) * 0.5,
+  color: colors[i]
+}));
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  blobs.forEach(b => {
+    b.x += b.vx; b.y += b.vy;
+    if (b.x < -b.r) b.x = canvas.width + b.r;
+    if (b.x > canvas.width + b.r) b.x = -b.r;
+    if (b.y < -b.r) b.y = canvas.height + b.r;
+    if (b.y > canvas.height + b.r) b.y = -b.r;
+    const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+    g.addColorStop(0, b.color + 'cc');
+    g.addColorStop(1, b.color + '00');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
 {% endblock %}

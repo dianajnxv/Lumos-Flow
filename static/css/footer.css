@@ -1,0 +1,217 @@
+.footer {
+  background-color: var(--background-color);
+  filter: brightness(0.96);
+  border-top: 4px solid var(--accent-color);
+  overflow: hidden;
+  width: 100%;
+}
+
+body.motivational-theme .footer {
+  border-top: 6px solid transparent;
+  border-image: var(--motivational-gradient) 1;
+}
+
+.footer-top {
+  padding: 4rem 4rem 2rem;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.4fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  max-width: 160px;
+  height: auto;
+  margin-bottom: 1.5rem;
+  display: block;
+  transition: filter 0.3s ease;
+}
+
+.footer-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.footer-contact-link {
+  color: var(--description-color);
+  text-decoration: none;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.footer-contact-link:hover {
+  color: var(--accent-color);
+  padding-left: 5px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.footer-social {
+  color: var(--description-color);
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer-social:hover {
+  color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.footer-heading {
+  color: var(--text-color);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 1.25rem;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-links a {
+  color: var(--description-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--accent-color);
+  padding-left: 5px;
+}
+
+.footer-sub {
+  font-size: 0.82rem;
+  color: var(--description-color);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.footer-subscribe {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-subscribe input[type="email"],
+.footer-subscribe input {
+  padding: 12px 15px;
+  width: 100%;
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  border-radius: 10px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.footer-btn {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+}
+.footer-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.footer-error {
+  color: #ff6b6b;
+  font-size: 0.78rem;
+}
+
+.footer-wordmark-wrap {
+  padding: 0 3rem;
+  overflow: hidden;
+  line-height: 0.85;
+  margin-top: 1rem;
+}
+
+.footer-wordmark {
+  display: block;
+  font-size: clamp(5rem, 14vw, 13rem);
+  font-weight: 800;
+  color: var(--text-color);
+  opacity: 0.08;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  line-height: 0.9;
+  user-select: none;
+}
+
+.footer-bottom {
+  padding: 1.25rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.footer-copy {
+  font-size: 0.78rem;
+  color: var(--description-color);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 1.5rem;
+}
+.footer-bottom-links a {
+  font-size: 0.78rem;
+  color: var(--description-color);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+.footer-bottom-links a:hover {
+  color: var(--accent-color);
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .footer-top { padding: 3rem 2rem 2rem; }
+  .footer-bottom {
+    padding: 1rem 2rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  .footer-wordmark-wrap { padding: 0 1.5rem; }
+}
+
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-wordmark { font-size: clamp(3rem, 18vw, 5rem); }
+}

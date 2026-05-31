@@ -1,32 +1,37 @@
 {% load static %}
-<footer id="contacts" class="footer py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-3 mb-4">
-        <img src="{% static 'images/logo-white.png' %}" alt="HabiTrack" class="footer-logo img-fluid mb-3" style="max-height: 40px;">
-        <div class="contact-links">
-          <p class="mb-1"><a href="tel:+380999999999"><i class="fa-solid fa-phone me-2"></i> +38 099 999 999</a></p>
-          <p class="mb-1"><a href="mailto:info@habitrack.com"><i class="fa-solid fa-envelope me-2"></i> info@habitrack.com</a></p>
-          <div class="social-icons mt-3">
-            <a href="#" class="me-3"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="me-3"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-          </div>
+<footer id="contacts" class="footer">
+  <div class="footer-top">
+    <div class="footer-grid">
+ 
+      <div class="footer-brand">
+        <img src="{% static 'images/logo-white.png' %}" alt="Lumos Flow" class="footer-logo">
+        <div class="footer-contacts">
+          <a href="tel:+380999999999" class="footer-contact-link">
+            <i class="fa-solid fa-phone"></i> +38 099 999 999
+          </a>
+          <a href="mailto:info@habitrack.com" class="footer-contact-link">
+            <i class="fa-solid fa-envelope"></i> info@habitrack.com
+          </a>
+        </div>
+        <div class="footer-socials">
+          <a href="#" class="footer-social" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="footer-social" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="footer-social" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
         </div>
       </div>
-
-      <div class="col-md-3 mb-4">
-        <h4 class="mb-3">Information</h4>
-        <ul class="list-unstyled">
+ 
+      <div class="footer-col">
+        <h5 class="footer-heading">Information</h5>
+        <ul class="footer-links">
           <li><a href="/#aboutUs">About Us</a></li>
           <li><a href="/#testimonials">Testimonials</a></li>
           <li><a href="#">Blog</a></li>
         </ul>
       </div>
-
-      <div class="col-md-3 mb-4">
-        <h4 class="mb-3">Helpful Links</h4>
-        <ul class="list-unstyled">
+ 
+      <div class="footer-col">
+        <h5 class="footer-heading">Quick Links</h5>
+        <ul class="footer-links">
           {% if user.is_authenticated %}
             <li><a href="#" data-bs-toggle="modal" data-bs-target="#addHabit">Add Habit</a></li>
             <li><a href="{% url 'schedule' %}">Schedule</a></li>
@@ -36,28 +41,34 @@
           {% endif %}
         </ul>
       </div>
-
-      <div class="col-md-3 mb-4">
-        <h4 class="mb-3">Stay Updated</h4>
-        <form method="post" action="{% url 'subscribe' %}" class="subscribe-form">
+ 
+      <div class="footer-col">
+        <h5 class="footer-heading">Stay Updated</h5>
+        <p class="footer-sub">Get habit tips and updates.</p>
+        <form method="post" action="{% url 'subscribe' %}" class="footer-subscribe">
           {% csrf_token %}
-          <div class="mb-2">
-            {{ form.email }} 
-          </div>
+          {{ form.email }}
           {% if form.email.errors %}
             {% for error in form.email.errors %}
-              <small class="text-danger d-block mb-2">{{ error }}</small>
+              <small class="footer-error">{{ error }}</small>
             {% endfor %}
           {% endif %}
-          <button type="submit" class="btn btn-accent w-100">Subscribe</button>
+          <button type="submit" class="footer-btn">Subscribe</button>
         </form>
       </div>
+ 
     </div>
-
-    <hr class="my-4" style="opacity: 0.1;">
-
-    <div class="footer-bottom text-center">
-      <p class="mb-0">&copy; 2026 HabiTrack | All Rights Reserved</p>
+  </div>
+ 
+  <div class="footer-wordmark-wrap">
+    <span class="footer-wordmark">Lumos Flow</span>
+  </div>
+ 
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2026 Lumos Flow | All Rights Reserved</p>
+    <div class="footer-bottom-links">
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Privacy Policy</a>
     </div>
   </div>
 </footer>

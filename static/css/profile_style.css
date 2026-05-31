@@ -8,7 +8,6 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* Base Components */
 .profile-card, .stat-card-mini {
     background: var(--card-bg, #ffffff);
     border: 1px solid rgba(128, 128, 128, 0.1);
@@ -29,7 +28,6 @@
     padding-top: 1.5rem !important; 
 }
 
-/* Avatar Section */
 .avatar-wrapper {
     width: 160px;
     height: 160px;
@@ -66,7 +64,6 @@
     opacity: 0.9;
 }
 
-/* Stats Cards */
 .stat-card-mini {
     display: flex;
     align-items: center;
@@ -101,7 +98,6 @@
     text-transform: uppercase;
 }
 
-/* Streak Section */
 .streak-card:hover {
     transform: translateY(-5px);
 }
@@ -154,7 +150,6 @@
     box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
 }
 
-/* Charts & Layout Headers */
 .card-header-custom {
     display: flex;
     justify-content: space-between;
@@ -183,7 +178,6 @@
     font-size: 0.8rem;
 }
 
-/* Trophies & Achievements */
 .achievements-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -191,7 +185,7 @@
     align-items: flex-start;
     gap: 15px;
     margin-top: 10px;
-    min-height: auto !important; /* Прибираємо фіксовану висоту */
+    min-height: auto !important; 
 }
 
 .achievement-icon {
@@ -237,7 +231,6 @@
     visibility: visible;
 }
 
-/* Buttons */
 .btn-circle-nav {
     display: flex;
     align-items: center;
@@ -289,7 +282,6 @@
     color: white;
 }
 
-/* Charts sizing */
 #activityChart {
     max-height: 160px !important;
 }
@@ -299,7 +291,6 @@
     width: 100% !important;
 }
 
-/* Theme Adaptation */
 body.dark-theme {
     --card-bg: #1e1e1e;
 }
@@ -316,13 +307,11 @@ body.dark-theme .btn-circle-nav {
     color: #ffffff;
 }
 
-/* Animations */
 @keyframes flicker {
     0% { filter: drop-shadow(0 0 10px rgba(255, 157, 0, 0.4)); transform: scale(1); }
     100% { filter: drop-shadow(0 0 20px rgba(244, 63, 94, 0.6)); transform: scale(1.05); }
 }
 
-/* Responsiveness */
 @media (max-width: 991px) {
     .profile-card {
         margin-bottom: 20px;
@@ -333,7 +322,6 @@ body.dark-theme .btn-circle-nav {
     justify-content: flex-start !important;
 }
 
-/* FIX LAYOUT */
 .col-lg-8 > * {
     width: 100%;
 }
@@ -342,18 +330,17 @@ body.dark-theme .btn-circle-nav {
     height: auto !important;
 }
 
-/* щоб графік не розтягував все */
 #activityChart {
     height: 200px !important;
 }
 
 
 .profile-layout .row.g-4 {
-    --bs-gutter-x: 1.5rem; /* такий самий як зверху */
+    --bs-gutter-x: 1.5rem; 
 }
 
 .container.profile-layout {
-    max-width: 1140px; /* або 1200px якщо хочеш ширше */
+    max-width: 1140px; 
 }
 .profile-layout {
     padding-left: 12px;
@@ -362,4 +349,90 @@ body.dark-theme .btn-circle-nav {
 
 .side-chart-card {
     height: 100%;
+}
+
+.custom-modal {
+    background: var(--background-color);
+    border-radius: 20px;
+    border: 1px solid var(--accent-color);
+}
+
+.custom-modal .modal-header {
+    border-bottom: 1px solid rgba(128,128,128,0.1);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-modal .modal-title {
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.custom-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.custom-modal .modal-footer {
+    border-top: 1px solid rgba(128,128,128,0.1);
+    padding: 1rem 1.5rem;
+}
+
+.custom-modal .form-label {
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.custom-modal .form-control {
+    background: var(--background-color);
+    border: 1px solid var(--description-color);
+    border-radius: 10px;
+    color: var(--text-color);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.custom-modal .form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: none;
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.custom-modal textarea.form-control {
+    resize: none;
+}
+
+.custom-modal .btn-light {
+    background: transparent;
+    border: 1px solid var(--description-color);
+    color: var(--text-color);
+    border-radius: 10px;
+}
+
+.custom-modal .btn-dark {
+    background: var(--accent-color);
+    color: var(--background-color);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.custom-modal .btn-dark:hover {
+    opacity: 0.85;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: var(--description-color);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: var(--text-color);
 }

@@ -1,12 +1,23 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+    --light-bg: #F5F5F7;
+    --light-text: #1D1D1F;
+    --light-desc: #86868B;
+    --light-accent: #3A3A3C;
+
+    --dark-bg: #121212;
+    --dark-text: #F5F5F7;
+    --dark-desc: #A1A1A6;
+    --dark-accent: #FFFFFF;
+
+    --motiv-bg: #FFF9F2;       
+    --motiv-text: #3D2B1F;     
+    --motiv-desc: #8E705A;    
+    --motiv-accent: #FF9500;
 }
 
-html {
-    scroll-behavior: smooth;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
     font-family: 'Open Sans', sans-serif;
@@ -16,4 +27,43 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     position: relative;
+}
+
+body.light-theme {
+    --background-color: var(--light-bg);
+    --text-color: var(--light-text);
+    --description-color: var(--light-desc);
+    --accent-color: var(--light-accent);
+    --dropdown-bg: #FFFFFF;
+    --tip1-bg: #3A3A3C;
+    --tip2-bg: #5A5A5C;
+    --tip3-bg: #8E705A;
+    --btn-bg: var(--light-text);
+    --btn-text: var(--light-bg);
+}
+
+body.dark-theme {
+    --background-color: var(--dark-bg);
+    --text-color: var(--dark-text);
+    --description-color: var(--dark-desc);
+    --accent-color: var(--dark-accent);
+    --dropdown-bg: #1C1C1E;
+    --tip1-bg: #2C2C2E;
+    --tip2-bg: #3A3A3C;
+    --tip3-bg: #6B5347;
+    --btn-bg: #F5F5F7;
+    --btn-text: #121212;
+}
+
+body.motivational-theme {
+    --background-color: var(--motiv-bg);
+    --text-color: var(--motiv-text);
+    --description-color: var(--motiv-desc);
+    --accent-color: var(--motiv-accent);
+    --dropdown-bg: #FFFFFF;
+    --tip1-bg: #FF9500;
+    --tip2-bg: #8E705A;
+    --tip3-bg: #C4834A;
+    --btn-bg: var(--motiv-accent);
+    --btn-text: #ffffff;
 }

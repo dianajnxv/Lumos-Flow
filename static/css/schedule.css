@@ -28,30 +28,6 @@ h2 {
     font-weight: 700;
 }
 
-.fc-event.calendar-task-event {
-    background-color: var(--accent-color) !important;
-    color: var(--background-color) !important; /* Текст контрастний до акценту */
-    border: none !important;
-}
-
-.fc-event.calendar-habit-event {
-    background-color: transparent !important; /* Прозорий фон */
-    border: 2px solid var(--accent-color) !important; /* Кольорова рамка */
-    color: var(--text-color) !important; /* Текст кольору теми */
-    font-weight: 700 !important;
-}
-
-.fc-event.calendar-habit-event:hover {
-    background-color: var(--accent-color) !important;
-    color: var(--background-color) !important;
-    transition: 0.2s;
-}
-
-.fc-event.calendar-habit-event .fc-event-title,
-.fc-event.calendar-habit-event .fc-event-time {
-    color: var(--text-color) !important;
-}
-
 .habits-carousel {
     position: relative;
     width: 100%;
@@ -86,10 +62,7 @@ h2 {
     border-left: 6px solid #ccc;
 }
 
-.habits__card:hover {
-    transform: translateY(-5px);
-}
-
+.habits__card:hover { transform: translateY(-5px); }
 .habits__card.priority-high { border-left-color: #ff4d4d; }
 .habits__card.priority-medium { border-left-color: #ffcc00; }
 .habits__card.priority-low { border-left-color: #00cc66; }
@@ -140,7 +113,6 @@ h2 {
 .status-missed { color: #dc3545; }
 .status-not-done { color: var(--description-color); opacity: 0.5; }
 
-/* --- Дні тижня --- */
 .habits__days-list {
     display: flex;
     gap: 8px;
@@ -166,8 +138,7 @@ h2 {
     border: 1px solid var(--accent-color);
 }
 
-/* --- Кнопки інтерфейсу --- */
-button, .btn-back, .btn-status, .btn-edit {
+.btn-back {
     background-color: var(--accent-color);
     color: var(--background-color);
     padding: 10px 18px;
@@ -185,6 +156,7 @@ button, .btn-back, .btn-status, .btn-edit {
     cursor: pointer;
     font-size: 1rem;
     transition: color 0.2s;
+    padding: 0;
 }
 
 .action-btn.edit:hover { color: var(--accent-color); }
@@ -206,13 +178,13 @@ button, .btn-back, .btn-status, .btn-edit {
     z-index: 10;
     transition: transform 0.2s ease;
     outline: none;
+    padding: 0;
 }
 
 .carousel-btn:hover { transform: scale(1.2); }
 .carousel-btn.prev { left: -10px; }
 .carousel-btn.next { right: -10px; }
 
-/* --- FullCalendar: Кастомізація (Прибираємо синій колір) --- */
 #task-calendar {
     background-color: var(--dropdown-bg);
     border-radius: 24px;
@@ -220,7 +192,6 @@ button, .btn-back, .btn-status, .btn-edit {
     border: 1px solid rgba(146, 154, 171, 0.2);
 }
 
-/* Кнопки календаря */
 .fc-button {
     background-color: var(--accent-color) !important;
     color: var(--background-color) !important;
@@ -236,14 +207,12 @@ button, .btn-back, .btn-status, .btn-edit {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Дати та заголовки (прибираємо синій колір посилань) */
-.fc-daygrid-day-number, 
+.fc-daygrid-day-number,
 .fc-col-header-cell-cushion {
     color: var(--text-color) !important;
     text-decoration: none !important;
 }
 
-/* Події в календарі */
 .fc-event {
     background-color: var(--accent-color) !important;
     border: none !important;
@@ -252,7 +221,30 @@ button, .btn-back, .btn-status, .btn-edit {
     color: var(--background-color) !important;
 }
 
-/* --- Модальні вікна та інше --- */
+.fc-event.calendar-task-event {
+    background-color: var(--accent-color) !important;
+    color: var(--background-color) !important;
+    border: none !important;
+}
+
+.fc-event.calendar-habit-event {
+    background-color: transparent !important;
+    border: 2px solid var(--accent-color) !important;
+    color: var(--text-color) !important;
+    font-weight: 700 !important;
+}
+
+.fc-event.calendar-habit-event:hover {
+    background-color: var(--accent-color) !important;
+    color: var(--background-color) !important;
+    transition: 0.2s;
+}
+
+.fc-event.calendar-habit-event .fc-event-title,
+.fc-event.calendar-habit-event .fc-event-time {
+    color: var(--text-color) !important;
+}
+
 .task-calendar__modal {
     background-color: var(--dropdown-bg) !important;
     color: var(--text-color) !important;
@@ -279,7 +271,6 @@ hr {
     margin: 40px 0;
 }
 
-/* --- Адаптивність --- */
 @media (max-width: 992px) {
     .habit-card-wrapper { flex: 0 0 50%; }
 }
