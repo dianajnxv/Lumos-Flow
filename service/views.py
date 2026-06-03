@@ -103,21 +103,21 @@ def profile_view(request, username):
     user = get_object_or_404(CustomUser, username=username)
 
     success_rate_data = Progress.objects.filter(user_id=user.id).aggregate(
-        done=Count('id', filter=Q(status__iexact='done')),  
-        missed=Count('id', filter=Q(status__iexact='missed')),
-        not_done=Count('id', filter=Q(status__iexact='not_done')) 
+        done=Count('id', filter=Q(status__iexact='completed')),  
+        missed=Count('id', filter=Q(status__iexact='skipped')),
+        not_done=Count('id', filter=Q(status__iexact='not_completed')) 
     )
 
     habits_data = Habit.objects.filter(user_id=user.id).values('category').annotate(count=Count('id'))
 
     activity_query = Progress.objects.filter(
         user_id=user.id, 
-        status__iexact='done', 
+        status__iexact='completed', 
         date__gte=timezone.now() - timedelta(days=30)
     ).values('date').annotate(total=Count('id')).order_by('date')
     
     weekly = (
-    Progress.objects.filter(user_id=user.id, status='done')
+    Progress.objects.filter(user_id=user.id, status='completed')
     .annotate(day=ExtractWeekDay('date'))
     .values('day')
     .annotate(total=Count('id'))
@@ -203,7 +203,7 @@ def edit_profile_view(request, username):
 def change_theme(request):
     if request.method == "POST":
         theme = request.POST.get("theme")
-        if theme in ["light", "dark", "motivational"]:
+        if theme in ["light", "dark", "motivating"]:
             if request.user.is_authenticated:
                 request.user.theme = theme
                 request.user.save()
@@ -300,11 +300,18 @@ def toggle_status(request, pk):
         habit.status = new_status
         habit.save()
 
+        habit_to_progress_status = {
+            'done': 'completed',
+            'missed': 'skipped',
+            'not_done': 'not_completed',
+        }
+        progress_status = habit_to_progress_status.get(new_status, 'not_completed')
+
         Progress.objects.update_or_create(
             user=request.user,
             habit=habit,
             date=timezone.now().date(),
-            defaults={'status': new_status}
+            defaults={'status': progress_status}
         )
         
     return redirect('schedule')

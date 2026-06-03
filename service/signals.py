@@ -14,7 +14,7 @@ def _update_streaks_in_db(user):
     today = date.today()
     completed_dates = (
         Progress.objects
-        .filter(user=user, status='done')
+        .filter(user=user, status='completed')
         .values_list('date', flat=True)
         .order_by('-date')
         .distinct()
